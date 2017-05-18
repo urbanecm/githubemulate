@@ -1,0 +1,7 @@
+FORWARD: 443:sis.ssakhk.cz,443:github.com,80:sis.ssakhk.cz,80:github.com,22:github.com
+SERVER_IP: vps.urbanec.cz
+SERVER_PORT: 2222
+SERVER_USER: tunelar
+SERVER_KEY: /home/yourusername/.ssh/id_rsa_tunelar
+AUTOSSH: True
+BAD_IP: 195.113.165.66

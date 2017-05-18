@@ -15,5 +15,34 @@ if data['ip'] == '195.113.165.66':
 	os.system('autossh -p 2222 -f -i /home/martin/.ssh/id_rsa_tunelar -NL 22:github.com:22 tunelar@vps.urbanec.cz')
 	os.system('autossh -p 2222 -f -i /home/martin/.ssh/id_rsa_tunelar -NL 443:github.com:443 tunelar@vps.urbanec.cz')
 	os.system('autossh -p 2222 -f -i /home/martin/.ssh/id_rsa_tunelar -NL 80:github.com:80 tunelar@vps.urbanec.cz')
+	print "Editing /etc/hosts to force state that Github.com is 127.0.0.1"
+	f = open('/etc/hosts', 'r')
+	lines = f.readlines()
+	f.close()
+	
+	lines.append('127.0.0.1\tgithub.com\n')
+	
+	f = open('/etc/hosts', 'w')
+	for line in lines:
+		f.write(line)
+	f.close()
 else:
-	print "Doing nothing"
+	print "Reverting changes"
+	print "Reverting changes in /etc/hosts"
+
+	f = open('/etc/hosts', 'r')
+	lines = f.readlines()
+	f.close()
+	
+	newfile = []
+	for line in lines:
+		if 'github' not in line:
+			newfile.append(line)
+	
+	f = open('/etc/hosts', 'w')
+	for line in newfile:
+		f.write(line)
+	f.close()
+
+	print "Killing tunels"
+	os.system('killall autossh')

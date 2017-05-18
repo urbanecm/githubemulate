@@ -4,11 +4,19 @@
 import requests
 import json
 import os
+import os.path
+import sys
 
 url = 'https://api.ipify.org?format=json'
 jsonData = requests.get(url).content
 data = json.loads(jsonData)
 if data['ip'] == '195.113.165.66':
+	if os.path.isfile('/etc/schoolGithubEmulate'):
+		print "Tunel already turned on, no need to turn them on again"
+		sys.exit()
+		
+	print "Creating system config file that indicates this tunel is set on"
+	os.system('touch /etc/schoolGithubEmulate')
 	print "Stopping local ssh"
 	os.system('service ssh stop')
 	print "Starting ssh tunel for GitHub"
@@ -27,7 +35,11 @@ if data['ip'] == '195.113.165.66':
 		f.write(line)
 	f.close()
 else:
+	if os.path.isfile('/etc/schoolGithubEmulate') == False:
+		print "Tunel already turned off, no need to turn them off again"
 	print "Reverting changes"
+	print "Removing the system config file that indicates this tunel is set on"
+	os.system('rm /etc/schoolGithubEmulate')
 	print "Reverting changes in /etc/hosts"
 
 	f = open('/etc/hosts', 'r')
